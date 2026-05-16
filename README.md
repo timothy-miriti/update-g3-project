@@ -1,248 +1,105 @@
-# MovieHub – Trailer & Watchlist Platform
+# MovieHub
 
-MovieHub is a modern React-based movie trailer and discovery platform that allows users to explore popular movies, watch trailers, and create a personalized movie wishlist.
+MovieHub is a React movie discovery app built with Vite. It lets users browse popular and trending movies, search by title, view movie details and trailers, and save movies to a local watchlist.
 
-Built with a clean cinematic interface and responsive design, MovieHub delivers an engaging experience for movie lovers who want to discover trending films and organize what they plan to watch next.
+## Features
 
----
-
-# Overview
-
-MovieHub helps users:
-
-- Browse popular and trending movies
+- Browse popular movies
+- Browse trending movies
 - Search movies by title
-- Watch official movie trailers
-- View detailed movie information
-- Add movies to a personal wishlist
-- Remove movies from their wishlist
-- Organize future movies to watch
+- View movie details, rating, runtime, cast, and trailer
+- Add and remove movies from a watchlist
+- Set a planned watch date for saved movies
+- Persist the watchlist with `localStorage`
+- Navigate between Movies and About pages with React Router
+- Manage movie state with Redux Toolkit
 
-The application integrates with the TMDB (The Movie Database) API to fetch real-time movie data including posters, ratings, trailers, and descriptions.
+## Tech Stack
 
----
+- React
+- Vite
+- Redux Toolkit
+- React Redux
+- React Router DOM
+- CSS
+- TMDB API
 
-# The Problem
+## Project Structure
 
-Movie lovers often use multiple platforms to:
-
-- Discover movies
-- Watch trailers
-- Track movies they want to watch
-
-Most platforms either focus only on streaming or only on reviews without giving users a simple personalized movie tracking experience.
-
----
-
-# The Solution
-
-MovieHub provides a centralized movie experience where users can:
-
-- Discover trending and popular films
-- Watch trailers instantly
-- Save movies into a personal wishlist
-- Explore movie details in one place
-- Enjoy a fast and responsive cinematic UI
-
----
-
-# Features
-
-## Movie Discovery
-
-- Browse trending and popular movies
-- Dynamic movie categories
-- Real-time movie updates from TMDB API
-
----
-
-## Search Functionality
-
-- Search movies instantly by title
-- Dynamic search rendering
-- Fast UI updates using React state
-
----
-
-## Trailer Viewing
-
-- Watch official movie trailers
-- Embedded trailer player
-- Interactive cinematic experience
-
----
-
-## Wishlist Management
-
-Users can:
-
-- Add movies to wishlist
-- Remove movies from wishlist
-- Save movies for future viewing
-
-Wishlist data is stored using localStorage for persistence.
-
----
-
-## Movie Details
-
-View detailed information including:
-
-- Movie title
-- Release date
-- Ratings
-- Overview
-- Genres
-- Posters and backdrops
-
----
-
-## Responsive Design
-
-MovieHub is optimized for:
-
-- Desktop
-- Tablet
-- Mobile devices
-
----
-
-# Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| React.js | Frontend Framework |
-| Vite | Build Tool |
-| JavaScript | Application Logic |
-| CSS | Styling |
-| TMDB API | Movie Data |
-| localStorage | Wishlist Persistence |
-
----
-
-# React Concepts Used
-
-- Functional Components
-- useState
-- useEffect
-- useMemo
-- useRef
-- Component-Based Architecture
-- Props and State Management
-
----
-
-# Getting Started
-
-## Prerequisites
-
-Make sure you have installed:
-
-- Node.js (v16 or higher)
-- npm
-
----
-
-# Installation
-
-## 1. Clone the repository
-
-```bash
-git clone https://github.com/timothy-miriti/update-g3-project.git
+```txt
+src/
+  app/
+    store.js
+  components/
+    CategoryFilters.jsx
+    Hero.jsx
+    MovieCard.jsx
+    MovieDetails.jsx
+    MovieGrid.jsx
+    SearchBar.jsx
+    TrailerPlayer.jsx
+  features/
+    movies/
+      moviesSlice.js
+  pages/
+    About.jsx
+    Home.jsx
+  api.js
+  App.jsx
+  main.jsx
 ```
 
-## 2. Navigate into the project folder:
+## Getting Started
 
-```bash
-cd moviehub
-```
-
-## 3. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-## 4. Start the development server:
+Start the development server:
+
 ```bash
 npm run dev
 ```
 
-# API Configuration
-MovieHub uses the TMDB API.
+Build for production:
 
-Create a .env file in the root folder:
-
-```env
-VITE_TMDB_API_KEY=your_api_key
-```
-
-Access the key inside the project using:
-
-```javascript
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY
-```
-
----
-
-# User Stories
-As a User
-- I want to browse trending movies so that I can discover popular films.
-- I want to search movies by title so that I can quickly find movies I like.
-- I want to watch movie trailers before deciding what to watch.
-- I want to add movies to my wishlist so I can save movies for later.
-- I want to remove movies from my wishlist when I no longer need them.
-- I want to see detailed movie information before watching.
-
-# Future Improvements
-
-Planned improvements include:
-- User authentication
-- Backend database integration
-- Personalized recommendations
-- Pagination and infinite scrolling
-- Dark/Light mode
-- Community reviews and ratings
-- Better loading animations
-- Unit and integration testing
-
-# Design Philosophy
-MovieHub focuses on creating a cinematic and immersive user experience through:
-- Bold movie visuals
-- Interactive UI elements
-- Responsive layouts
-- Smooth user interactions
-- Clean component architecture
-
-# Project Structure
 ```bash
-src/
-│
-├── components/
-├── App.jsx
-├── api.js
-├── main.jsx
-└── styles/
+npm run build
 ```
 
-# Challenges Faced
-- Some challenges during development included:
-- Managing state across multiple components
-- Handling API requests efficiently
-- Syncing wishlist data with localStorage
-- Creating a responsive movie layout
+Run lint checks:
 
-# Learning Outcomes
-This project helped improve skills in:
-- React development
-- API integration
-- State management
-- Component architecture
-- Responsive design
-- Local storage management
+```bash
+npm run lint
+```
 
-# Author
-Developed by the MovieHub Team.
+## Routes
 
-# License
-© 2026 MovieHub Project. All rights reserved.
+- `/` - Movie discovery, search, details, trailer, and watchlist tools
+- `/about` - Short project information page
+
+## State Management
+
+Redux Toolkit is used for the movie app state in `src/features/movies/moviesSlice.js`.
+
+The slice stores:
+
+- active category
+- search query
+- loaded movie list
+- selected movie ID
+- selected movie details
+- loading and error states
+- watchlist movies
+
+Async thunks load movie lists and movie details from the TMDB API.
+
+## API
+
+Movie data comes from The Movie Database API through `src/api.js`. The app currently uses the API key configured in that file.
+
+## Notes
+
+The watchlist is saved in the browser with `localStorage`, so saved movies remain after refreshing on the same device and browser.
