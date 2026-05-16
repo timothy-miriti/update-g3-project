@@ -5,6 +5,35 @@
     linear-gradient(135deg, #070a13 0%, #111827 48%, #17120d 100%);
 }
 
+.route-links {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  left: clamp(18px, 4vw, 56px);
+  position: absolute;
+  right: clamp(18px, 4vw, 56px);
+  top: 18px;
+  z-index: 20;
+}
+
+.route-links a {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  font-weight: 800;
+  min-height: 36px;
+  padding: 8px 14px;
+  text-decoration: none;
+}
+
+.route-links a.active {
+  background: #67e8f9;
+  color: #07111f;
+}
+
 .hero {
   min-height: 58vh;
   padding: 28px clamp(18px, 4vw, 56px) 44px;
@@ -448,6 +477,30 @@ button {
 
 .error {
   color: #fecaca;
+}
+
+.about-page {
+  color: #dbeafe;
+  display: grid;
+  gap: 18px;
+  min-height: 100vh;
+  padding: 120px clamp(18px, 4vw, 56px) 56px;
+  place-content: start;
+}
+
+.about-page h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+.about-page p {
+  color: #cbd5e1;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+.about-page .primary-action {
+  justify-self: start;
 }
 
 @media (max-width: 860px) {

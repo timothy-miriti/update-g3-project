@@ -1,10 +1,14 @@
 
 const BASE = "https://api.themoviedb.org/3";
-const API_KEY = "bc54f8eb0c0c0a94d9a40963192c6230";
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 export const IMAGE_BASE = "https://image.tmdb.org/t/p";
 
 // Shared helper for calling TMDB endpoints with the API key and query parameters.
 async function fetchJSON(path, params = {}) {
+  if (!API_KEY) {
+    throw new Error("Missing TMDB API key. Add VITE_TMDB_API_KEY to your .env file.");
+  }
+
   const url = new URL(`${BASE}${path}`);
   url.searchParams.set("api_key", API_KEY);
 
