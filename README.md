@@ -102,4 +102,4 @@ Movie data comes from The Movie Database API through `src/api.js`. The app curre
 
 ## Notes
 
-The watchlist is saved in the browser with `localStorage`, so saved movies remain after refreshing on the same device and browser.
+The watchlist is saved in the browser with authenticated backend environment
