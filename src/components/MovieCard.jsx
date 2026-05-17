@@ -12,6 +12,7 @@ function MovieCard({
   onRemoveWatchlist,
   onSelect,
   onUpdateWatchDate,
+  pending,
 }) {
   // Local state controls the temporary date edit form on watchlist cards.
   const [editingDate, setEditingDate] = useState(false)
@@ -55,6 +56,7 @@ function MovieCard({
             <label className="watch-date-field">
               <span>Watch date</span>
               <input
+                disabled={pending}
                 onChange={(event) => setWatchDate(event.target.value)}
                 type="date"
                 value={watchDate}
@@ -64,21 +66,27 @@ function MovieCard({
           <div className="watchlist-buttons">
             {/* Save stores the date; Edit opens the date picker. */}
             {editingDate ? (
-              <button className="mini-action" onClick={handleSaveDate} type="button">
-                Save
+              <button className="mini-action" disabled={pending} onClick={handleSaveDate} type="button">
+                {pending ? 'Saving...' : 'Save'}
               </button>
             ) : (
-              <button className="mini-action" onClick={() => setEditingDate(true)} type="button">
+              <button
+                className="mini-action"
+                disabled={pending}
+                onClick={() => setEditingDate(true)}
+                type="button"
+              >
                 Edit
               </button>
             )}
             {/* Delete removes this movie from the watchlist. */}
             <button
               className="mini-action danger"
+              disabled={pending}
               onClick={() => onRemoveWatchlist(movie.id)}
               type="button"
             >
-              Delete
+              {pending ? 'Deleting...' : 'Delete'}
             </button>
           </div>
         </div>

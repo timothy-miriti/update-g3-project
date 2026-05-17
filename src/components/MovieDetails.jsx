@@ -4,7 +4,16 @@
 import { movieRating, movieYear } from '../utils/movie'
 
 // Side panel that shows selected movie facts, rating, cast, and watchlist action.
-function MovieDetails({ loading, movie, onToggleWatchlist, watchlisted }) {
+function MovieDetails({
+  disabledActions,
+  favorite,
+  loading,
+  movie,
+  onToggleFavorite,
+  onToggleWatchlist,
+  signedIn,
+  watchlisted,
+}) {
   // Only show the first few cast members to keep the details panel compact.
   const cast = movie?.credits?.cast?.slice(0, 5) ?? []
 
@@ -24,10 +33,23 @@ function MovieDetails({ loading, movie, onToggleWatchlist, watchlisted }) {
           {/* Toggles whether this movie is saved for later. */}
           <button
             className="watchlist-action"
+            disabled={disabledActions}
             onClick={() => onToggleWatchlist(movie)}
             type="button"
           >
-            {watchlisted ? 'Remove from Watchlist' : 'Add to Watchlist'}
+            {!signedIn
+              ? 'Log in to Save'
+              : watchlisted
+                ? 'Remove from Watchlist'
+                : 'Add to Watchlist'}
+          </button>
+          <button
+            className="watchlist-action favorite-detail-action"
+            disabled={disabledActions}
+            onClick={() => onToggleFavorite(movie)}
+            type="button"
+          >
+            {!signedIn ? 'Log in to Favorite' : favorite ? 'Unfavorite' : 'Favorite'}
           </button>
           {/* Quick facts about the selected movie. */}
           <div className="facts">

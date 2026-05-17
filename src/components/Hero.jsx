@@ -7,11 +7,18 @@ import { imageUrl } from '../utils/movie'
 
 // Top hero section with the app title, category navigation, search, and main movie actions.
 function Hero({
+  authLoading,
   categories,
   category,
   categoryLabel,
+  currentUser,
+  disabledActions,
+  favorite,
   hero,
   onCategoryChange,
+  onFavorite,
+  onLogin,
+  onLogout,
   onSelectHero,
   onToggleWatchlist,
   query,
@@ -34,6 +41,25 @@ function Hero({
           <h1>Find your next watch</h1>
         </div>
         <div className="nav-actions">
+          <div className="account-actions">
+            {currentUser ? (
+              <>
+                <span className="account-name">{currentUser.name}</span>
+                <button className="account-button" onClick={onLogout} type="button">
+                  Log out
+                </button>
+              </>
+            ) : (
+              <button
+                className="account-button"
+                disabled={authLoading}
+                onClick={onLogin}
+                type="button"
+              >
+                {authLoading ? 'Logging in...' : 'Log in'}
+              </button>
+            )}
+          </div>
           {/* Category buttons switch between Popular, Trending, and Watchlist. */}
           <CategoryFilters
             categories={categories}
@@ -63,11 +89,23 @@ function Hero({
           {/* Adds or removes the hero movie from the saved watchlist. */}
           <button
             className="secondary-action"
-            disabled={!hero?.id}
+            disabled={!hero?.id || disabledActions}
             onClick={() => onToggleWatchlist(hero)}
             type="button"
           >
-            {watchlisted ? 'Remove from Watchlist' : 'Add to Watchlist'}
+            {!currentUser
+              ? 'Log in to Save'
+              : watchlisted
+                ? 'Remove from Watchlist'
+                : 'Add to Watchlist'}
+          </button>
+          <button
+            className="secondary-action favorite-action"
+            disabled={!hero?.id || disabledActions}
+            onClick={() => onFavorite(hero)}
+            type="button"
+          >
+            {!currentUser ? 'Log in to Favorite' : favorite ? 'Unfavorite' : 'Favorite'}
           </button>
         </div>
       </div>

@@ -65,6 +65,35 @@
   min-width: 0;
 }
 
+.account-actions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+}
+
+.account-name {
+  color: #e5e7eb;
+  font-weight: 800;
+}
+
+.account-button {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.account-button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
 .eyebrow,
 .section-label {
   color: #67e8f9;
@@ -181,6 +210,11 @@ button {
 .secondary-action:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+.favorite-action {
+  background: rgba(103, 232, 249, 0.18);
+  color: #ecfeff;
 }
 
 .content {
@@ -395,6 +429,11 @@ button {
   color: #fecaca;
 }
 
+.mini-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
 .details {
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -439,6 +478,16 @@ button {
   min-height: 42px;
   padding: 0 16px;
   width: 100%;
+}
+
+.watchlist-action:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.favorite-detail-action {
+  background: #67e8f9;
+  margin-top: 10px;
 }
 
 .facts {
@@ -517,6 +566,10 @@ button {
     align-items: stretch;
     flex-direction: column-reverse;
     width: 100%;
+  }
+
+  .account-actions {
+    justify-content: flex-end;
   }
 
   .search {

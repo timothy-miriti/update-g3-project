@@ -5,13 +5,15 @@ import MovieDetails from '../components/MovieDetails'
 import MovieGrid from '../components/MovieGrid'
 import TrailerPlayer from '../components/TrailerPlayer'
 import {
+  loginUser,
   loadMovieDetails,
   loadMovies,
+  logoutUser,
   removeWatchlist,
-  saveWatchlist,
   setCategory,
   setQuery,
   setSelectedId,
+  toggleFavorite,
   toggleWatchlist,
   updateWatchDate,
 } from '../features/movies/moviesSlice'
@@ -20,21 +22,28 @@ const CATEGORIES = [
   { id: 'popular', label: 'Popular' },
   { id: 'trending', label: 'Trending' },
   { id: 'watchlist', label: 'Watchlist' },
+  { id: 'favorites', label: 'Favorites' },
 ]
 
 export default function Home() {
   const dispatch = useDispatch()
   const playerRef = useRef(null)
   const {
+    authLoading,
     category,
+    currentUser,
     detailsLoading,
     error,
+    favorites,
+    favoritesPendingIds,
+    libraryLoading,
     loading,
     movies,
     query,
     selectedId,
     selectedMovie,
     watchlist,
+    watchlistPendingIds,
   } = useSelector((state) => state.movies)
 
   const activeCategory = useMemo(
@@ -42,9 +51,28 @@ export default function Home() {
     [category],
   )
   const isWatchlist = category === 'watchlist' && !query.trim()
+  const isFavorites = category === 'favorites' && !query.trim()
   const watchlistIds = useMemo(() => new Set(watchlist.map((movie) => movie.id)), [watchlist])
+  const favoriteIds = useMemo(() => new Set(favorites.map((movie) => movie.id)), [favorites])
+  const watchlistPendingSet = useMemo(
+    () => new Set(watchlistPendingIds),
+    [watchlistPendingIds],
+  )
+  const favoritesPendingSet = useMemo(
+    () => new Set(favoritesPendingIds),
+    [favoritesPendingIds],
+  )
   const selectedIsWatchlisted = selectedMovie ? watchlistIds.has(selectedMovie.id) : false
+  const selectedIsFavorite = selectedMovie ? favoriteIds.has(selectedMovie.id) : false
   const hero = selectedMovie ?? movies[0]
+  const heroActionPending = hero
+    ? watchlistPendingSet.has(hero.id) || favoritesPendingSet.has(hero.id)
+    : false
+  const libraryVersion = isWatchlist
+    ? JSON.stringify(watchlist)
+    : isFavorites
+      ? JSON.stringify(favorites)
+      : ''
 
   useEffect(() => {
     let request
@@ -56,11 +84,7 @@ export default function Home() {
       window.clearTimeout(timeoutId)
       request?.abort()
     }
-  }, [category, dispatch, query, watchlist])
-
-  useEffect(() => {
-    saveWatchlist(watchlist)
-  }, [watchlist])
+  }, [category, dispatch, libraryVersion, query])
 
   useEffect(() => {
     if (!selectedId) return
@@ -82,8 +106,15 @@ export default function Home() {
         categories={CATEGORIES}
         category={category}
         categoryLabel={activeCategory.label}
+        currentUser={currentUser}
+        authLoading={authLoading}
+        disabledActions={!currentUser || libraryLoading || heroActionPending}
+        favorite={hero ? favoriteIds.has(hero.id) : false}
         hero={hero}
+        onFavorite={(movie) => dispatch(toggleFavorite(movie))}
         onCategoryChange={(nextCategory) => dispatch(setCategory(nextCategory))}
+        onLogin={() => dispatch(loginUser())}
+        onLogout={() => dispatch(logoutUser())}
         onQueryChange={(nextQuery) => dispatch(setQuery(nextQuery))}
         onSelectHero={handleSelectMovie}
         onToggleWatchlist={(movie) => dispatch(toggleWatchlist(movie))}
@@ -93,13 +124,14 @@ export default function Home() {
 
       <section className="content">
         {error && <p className="status error">{error}</p>}
-        {loading && <p className="status">Loading movies...</p>}
+        {(loading || libraryLoading) && <p className="status">Loading movies...</p>}
 
-        {!loading && !error && (
+        {!loading && !libraryLoading && !error && (
           <>
             <div className="workspace">
               <MovieGrid
                 isWatchlist={isWatchlist}
+                isFavorites={isFavorites}
                 movies={movies}
                 onRemoveWatchlist={(movieId) => dispatch(removeWatchlist(movieId))}
                 onSelectMovie={handleSelectMovie}
@@ -107,11 +139,23 @@ export default function Home() {
                   dispatch(updateWatchDate({ movieId, watchDate }))
                 }
                 selectedId={selectedId}
+                watchlistPendingIds={watchlistPendingIds}
               />
               <MovieDetails
+                disabledActions={
+                  !currentUser ||
+                  libraryLoading ||
+                  (selectedMovie
+                    ? watchlistPendingSet.has(selectedMovie.id) ||
+                      favoritesPendingSet.has(selectedMovie.id)
+                    : false)
+                }
+                favorite={selectedIsFavorite}
                 loading={detailsLoading}
                 movie={selectedMovie}
+                onToggleFavorite={(movie) => dispatch(toggleFavorite(movie))}
                 onToggleWatchlist={(movie) => dispatch(toggleWatchlist(movie))}
+                signedIn={Boolean(currentUser)}
                 watchlisted={selectedIsWatchlisted}
               />
             </div>
